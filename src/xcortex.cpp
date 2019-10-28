@@ -20,7 +20,7 @@ void xcortex(vector<XCortex::OP*> ops, DataSet& data_set){
     OP* op = ops[op_id];
     cout << "*****op " << i << ": " << op->name << endl;
     op->init(data_set);
-    op->run();
+    op->run(data_set);
   }
 }
 int main(){
