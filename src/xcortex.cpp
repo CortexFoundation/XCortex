@@ -17,7 +17,9 @@ void xcortex(vector<XCortex::OP*> ops, DataSet& data_set){
   for(int i = 0; i < num_ops; i++){
     const int op_id = op_ids[i];
     OP* op = ops[op_id];
+#ifdef DEBUG
     cout << "*****op " << i << ": " << op->name << endl;
+#endif
     op->init(data_set);
     op->run(data_set);
   }
@@ -32,9 +34,11 @@ int main(){
 //        << endl;
 //  }
   DataSet data_set(1024);
+  data_set.print();
   vector<XCortex::OP*> ops;
   ops.push_back(new Dense());
   ops.push_back(new Relu());
   xcortex(ops, data_set);
+  data_set.print();
   return 0;
 }

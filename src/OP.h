@@ -40,7 +40,6 @@ namespace XCortex{
 
         for(int i = 0; i < num_inputs; i++){
             uint64_t size = ishape[i].Size();
-            std::cout << "input: " << i << ":" << size << std::endl;
             //init input data
             DLTensor *dl;
             CVMArrayAlloc((int64_t*)ishape[i].data(), ishape[i].ndim(), dtype_code, dtype_bits, dtype_lanes, ctx, device_id, &dl);
@@ -49,6 +48,7 @@ namespace XCortex{
             CVMArrayAlloc((int64_t*)ishape[i].data(), ishape[i].ndim(), dtype_code, dtype_bits, dtype_lanes, kDLCPU, 0, &cpu_tensor);
             std::vector<int32_t> data = xcortex_random.generate_random_value(size);
 #ifdef DEBUG
+            std::cout << "input: " << i << ":" << size << std::endl;
             for(int j = 0; j < size; j++){
                 std::cout << data[j] << " ";
             }
@@ -61,12 +61,10 @@ namespace XCortex{
         }
     }
     void init_inputs(DataSet& data_set){
-        std::cout << "init inputs" << std::endl;
         init_shape();
 
         for(int i = 0; i < num_inputs; i++){
             uint64_t size = ishape[i].Size();
-            std::cout << "input: " << i << ":" << size << std::endl;
             //init input data
             DLTensor *dl;
             CVMArrayAlloc((int64_t*)ishape[i].data(), ishape[i].ndim(), dtype_code, dtype_bits, dtype_lanes, ctx, device_id, &dl);
@@ -80,6 +78,7 @@ namespace XCortex{
             data_set.Read(data, size);
 
 #ifdef DEBUG
+            std::cout << "input: " << i << ":" << size << std::endl;
             for(int j = 0; j < size; j++){
                 std::cout << data[j] << " ";
             }
@@ -93,7 +92,6 @@ namespace XCortex{
     }
 
     void infer_shape(){
-        std::cout << "infer shape" << std::endl;
         static auto& finfer_shape =
             Op::GetAttr<cvm::FInferNodeEntryAttr<TShape> >("FInferShape");
         const cvm::Op *op = cvm::Op::Get(name);
@@ -104,15 +102,17 @@ namespace XCortex{
             return;
         }
         assert(finfer != nullptr);
-        bool infer_shape_ret = finfer(attr, &ishape, &oshape);
         try{
-            if(infer_shape_ret){
-                std::cout << "FInferShape ishape=[";
-                for (auto& shp : ishape) std::cout << shp << ", ";
-                std::cout << "] oshape=[";
-                for (auto& shp : oshape) std::cout << shp << ", ";
-                std::cout << "]\n";
-            }
+          bool infer_shape_ret = finfer(attr, &ishape, &oshape);
+#ifdef DEBUG
+          if(infer_shape_ret){
+            std::cout << "FInferShape ishape=[";
+            for (auto& shp : ishape) std::cout << shp << ", ";
+            std::cout << "] oshape=[";
+            for (auto& shp : oshape) std::cout << shp << ", ";
+            std::cout << "]\n";
+          }
+#endif
         }catch(const std::exception& e){
             std::cerr << "FInferShape error with " << e.what() << std::endl;
         }

@@ -20,11 +20,8 @@ namespace XCortex{
       }
 
       void init_param(){
-        std::cout << "init param" << std::endl;
         attr.name = name;
-        std::cerr << "op_type " << name << "\n";
         attr.op = cvm::Op::Get(name);
-        std::cerr << "op_type =====" << name << "\n";
 
         attr_str = "{}";//"{\"units\":\"1\", \"use_bias\":\"True\"}";
 
