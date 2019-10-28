@@ -29,7 +29,7 @@ namespace XCortex{
       //std::copy_n(vec, n, data.begin() + start);
       for(int i = 0; i < n; i++){
         //uint32_t index = (vec[i] < 0 ? -vec[i] : vec[i]) & DATA_SET_MASK;
-	uint32_t index = (vec[i] & 0x7fffffffffffffff) & DATA_SET_MASK;
+	uint32_t index = (vec[i] & 0x7fffffff) & DATA_SET_MASK;
         data[index] = vec[i];
       }
     }
