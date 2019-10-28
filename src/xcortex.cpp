@@ -33,7 +33,7 @@ int main(){
 //        << ", arguments: " << ops[i]->arguments.size()
 //        << endl;
 //  }
-  DataSet data_set(1024);
+  DataSet data_set(DATA_SET_SIZE);
   data_set.print();
   vector<XCortex::OP*> ops;
   ops.push_back(new Dense());
