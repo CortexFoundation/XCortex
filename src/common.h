@@ -22,6 +22,7 @@
 #include <vector>
 
 #include "random.h"
+#include "dataset.h"
 static XCortex::Random xcortex_random;
 using namespace cvm;
 using namespace cvm::runtime;
