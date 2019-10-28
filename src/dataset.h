@@ -28,8 +28,8 @@ namespace XCortex{
     void Write(const int32_t* vec, const uint32_t n){
       //std::copy_n(vec, n, data.begin() + start);
       for(int i = 0; i < n; i++){
-        //vec[i] < 0 : TODO yangyang
-        uint32_t index = (vec[i] < 0 ? -vec[i] : vec[i]) & DATA_SET_MASK;
+        //uint32_t index = (vec[i] < 0 ? -vec[i] : vec[i]) & DATA_SET_MASK;
+	uint32_t index = (vec[i] & 0x7fffffffffffffff) & DATA_SET_MASK;
         data[index] = vec[i];
       }
     }
