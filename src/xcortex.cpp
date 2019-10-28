@@ -6,11 +6,10 @@
 using namespace std;
 using namespace XCortex;
 
-const int MAX_OP = 4;
-const int MIN_OP = 3;
+#define NUM_OPS 32
 
 void xcortex(vector<XCortex::OP*> ops, DataSet& data_set){
-  int num_ops = xcortex_random.generate_random_value(MIN_OP, MAX_OP);
+  int num_ops = NUM_OPS;//xcortex_random.generate_random_value(MIN_OP, MAX_OP);
   //random ops
   vector<int32_t> op_ids(num_ops);
   op_ids = xcortex_random.generate_random_value(num_ops, 0, ops.size()); 

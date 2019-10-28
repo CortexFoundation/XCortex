@@ -75,10 +75,9 @@ namespace XCortex{
             CVMArrayAlloc((int64_t*)ishape[i].data(), ishape[i].ndim(), dtype_code, dtype_bits, dtype_lanes, kDLCPU, 0, &cpu_tensor);
 
             //std::vector<int32_t> data = xcortex_random.generate_random_value(size);
-            const int32_t data_set_index = xcortex_random.generate_random_value(0, size); 
             std::vector<int32_t> data(size);
             //std::copy_n(data_set.begin() + data_set_index, size, data.begin());
-            data_set.Read(data, data_set_index, size);
+            data_set.Read(data, size);
 
 #ifdef DEBUG
             for(int j = 0; j < size; j++){
@@ -195,10 +194,8 @@ namespace XCortex{
 
       for(int i = 0; i < num_outputs; i++){
         const uint32_t out_size = oshape[i].Size();
-        const int32_t data_set_index = xcortex_random.generate_random_value(0, data_set.size - out_size);
         int32_t* out_data = (int32_t*)outputs[i].data;
-        data_set.Write(out_data, data_set_index, out_size);
-        //std::copy_n(data, out_size, data_set.begin() + data_set_index);
+        data_set.Write(out_data, out_size);
       }
     }
 
