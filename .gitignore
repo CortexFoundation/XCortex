@@ -2,6 +2,8 @@ bin/
 obj/
 *.user
 *.suo
+*.so
+xcortex
 .vs
 x64/
 Release/
