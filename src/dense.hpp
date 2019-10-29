@@ -37,8 +37,8 @@ namespace XCortex{
         //init in shape
         TShape shp(dims);
         std::vector<uint64_t> tshape(dims);
-        shp[0] = 2;//xcortex_random.generate_random_value();
-        shp[1] = 2;//xcortex_random.generate_random_value();
+        shp[0] = OP_SHAPE;//xcortex_random.generate_random_value();
+        shp[1] = OP_SHAPE;//xcortex_random.generate_random_value();
         ishape[0] = shp;
         shp[0] = 1;//xcortex_random.generate_random_value();
         //shp[1] = 2;//xcortex_random.generate_random_value();
