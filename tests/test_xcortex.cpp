@@ -2,8 +2,10 @@
 #include "../src/dense.hpp"
 #include "../src/relu.hpp"
 #include "../src/conv2d.hpp"
+#include "../src/broadcast.hpp"
+#include "../src/reduce.hpp"
 
-#include "../src/siphash.h"
+#include "../src/siphash.h" 
 #include "../src/blake2.h"
 #include <unistd.h>
 #include "../src/xcortex.hpp"
@@ -46,6 +48,12 @@ int main(int argc, char **argv){
   ops.push_back(new Dense());
   ops.push_back(new Relu());
   ops.push_back(new Conv2d());
+  ops.push_back(new Broadcast("add"));
+  ops.push_back(new Broadcast("sub"));
+  ops.push_back(new Broadcast("mul"));
+  ops.push_back(new Broadcast("max"));
+  ops.push_back(new Reduce("max"));
+  ops.push_back(new Reduce("sum"));
 
   for(int i = 0; i < range; i++){
     XCortex::XCortex xcortex; 
