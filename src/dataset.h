@@ -3,10 +3,6 @@
 
 #include "common.h"
 
-#define XCORTEX_BITS 10
-#define DATA_SET_SIZE (1 << XCORTEX_BITS) 
-#define DATA_SET_MASK (DATA_SET_SIZE - 1)
-
 namespace XCortex{
   struct Random;
   struct DataSet{

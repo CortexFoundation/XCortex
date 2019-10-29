@@ -7,7 +7,7 @@ test_dense: cvm
 test_relu: cvm
 	g++ -o test_relu ../src/relu.hpp test_relu.cpp -I../cvm-runtime/include -L../cvm-runtime/build/cpu/ -lcvm_runtime_cpu --std=c++11 -pthread -fopenmp -I./ -g -DDEBUG && ./test_relu	
 xcortex: cvm
-	g++ -o xcortex ../src/xcortex.cpp ../src/blake2b-ref.cpp ../src/siphash.cc -I../cvm-runtime/include -L../cvm-runtime/build/cpu/ -lcvm_runtime_cpu --std=c++11 -pthread -fopenmp -I./ -g -DDEBUG && ./xcortex
+	g++ -o xcortex ../src/xcortex.cpp ../src/blake2b-ref.cpp ../src/siphash.cc -I../cvm-runtime/include -L../cvm-runtime/build/cpu/ -lcvm_runtime_cpu --std=c++11 -pthread -fopenmp -I./ -g && ./xcortex
       
 
 clean:
