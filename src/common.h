@@ -28,7 +28,7 @@ static XCortex::Random xcortex_random;
 using namespace cvm;
 using namespace cvm::runtime;
 
-#define OP_SHAPE 32
+#define OP_SHAPE 8
 
 #define NUM_OPS 32
 

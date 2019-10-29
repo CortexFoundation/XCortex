@@ -1,6 +1,8 @@
 #include "../src/dataset.h"
 #include "../src/dense.hpp"
 #include "../src/relu.hpp"
+#include "../src/conv2d.hpp"
+
 #include "../src/siphash.h"
 #include "../src/blake2.h"
 #include <unistd.h>
@@ -39,19 +41,23 @@ int main(int argc, char **argv){
         break;
     }
   }
+
+  vector<XCortex::OP*> ops;
+  ops.push_back(new Dense());
+  ops.push_back(new Relu());
+  ops.push_back(new Conv2d());
+
   for(int i = 0; i < range; i++){
     XCortex::XCortex xcortex; 
     xcortex.set_header_nonce(header, nonce + i);
+
+    xcortex_random.reset();
 
     DataSet data_set(DATA_SET_SIZE);
     //data_set.print();
     cout << "first hash :" << endl;
     char hash_result[32];
     blake2b_hash(data_set.data.data(), data_set.size, hash_result, sizeof(hash_result));
-
-    vector<XCortex::OP*> ops;
-    ops.push_back(new Dense());
-    ops.push_back(new Relu());
 
     xcortex.run(ops, data_set);
 

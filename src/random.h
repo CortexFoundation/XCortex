@@ -16,12 +16,16 @@ namespace XCortex{
     public:
     Random(){
       srand((unsigned)time(0));
+      nonce = 0;
     }
     Random(const siphash_keys& sipkeys){
       this->sipkeys.k0 = sipkeys.k0;
       this->sipkeys.k1 = sipkeys.k1;
       this->sipkeys.k2 = sipkeys.k2;
       this->sipkeys.k3 = sipkeys.k3;
+    }
+    void reset(){
+      nonce = 0;
     }
     void set_keys(const siphash_keys& sipkeys){
       this->sipkeys.k0 = sipkeys.k0;
