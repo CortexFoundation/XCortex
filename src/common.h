@@ -23,7 +23,11 @@
 
 #include "random.h"
 #include "dataset.h"
+
 static XCortex::Random xcortex_random;
 using namespace cvm;
 using namespace cvm::runtime;
+
+#define OP_SHAPE 32
+
 #endif
