@@ -1,13 +1,13 @@
-#ifndef XCORTEX_BROADCAST_H
-#define XCORTEX_BROADCAST_H
+#ifndef XCORTEX_ELEMWISE_H
+#define XCORTEX_ELEMWISE_H
 
 #include "OP.h"
 
 namespace XCortex{
-  class Broadcast: public OP{
+  class Elemwise: public OP{
     public:
-      Broadcast(std::string name){
-        this->name = "broadcast_" + name;
+      Elemwise(std::string name){
+        this->name = "elemwise_" + name;
         num_inputs = 2;
         num_outputs = 1;
         dims = 4;
@@ -22,6 +22,7 @@ namespace XCortex{
         attr.name = name;
         attr.op = cvm::Op::Get(name);
         assert(attr.op != nullptr);
+
         std::istringstream is(attr_str);
         utils::JSONReader reader(&is);
         reader.Read(&attr.dict);

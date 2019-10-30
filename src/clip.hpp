@@ -1,14 +1,14 @@
-#ifndef XCORTEX_BROADCAST_H
-#define XCORTEX_BROADCAST_H
+#ifndef XCORTEX_CLIP_H
+#define XCORTEX_CLIP_H
 
 #include "OP.h"
 
 namespace XCortex{
-  class Broadcast: public OP{
+  class Clip: public OP{
     public:
-      Broadcast(std::string name){
-        this->name = "broadcast_" + name;
-        num_inputs = 2;
+      Clip(){
+        this->name = "clip";
+        num_inputs = 1;
         num_outputs = 1;
         dims = 4;
         ishape.resize(num_inputs);
@@ -22,6 +22,8 @@ namespace XCortex{
         attr.name = name;
         attr.op = cvm::Op::Get(name);
         assert(attr.op != nullptr);
+        attr_str = "{\"a_max\":\"127\", \"a_min\":\"-127\"}";
+
         std::istringstream is(attr_str);
         utils::JSONReader reader(&is);
         reader.Read(&attr.dict);

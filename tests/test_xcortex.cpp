@@ -4,7 +4,13 @@
 #include "../src/conv2d.hpp"
 #include "../src/maxpool2d.hpp"
 #include "../src/broadcast.hpp"
+#include "../src/elemwise.hpp"
 #include "../src/reduce.hpp"
+#include "../src/clip.hpp"
+#include "../src/flatten.hpp"
+#include "../src/reshape.hpp"
+#include "../src/cvm_clip.hpp"
+#include "../src/cvm_shift.hpp"
 
 #include "../src/siphash.h" 
 #include "../src/blake2.h"
@@ -56,6 +62,14 @@ int main(int argc, char **argv){
   ops.push_back(new Broadcast("max"));
   ops.push_back(new Reduce("max"));
   ops.push_back(new Reduce("sum"));
+  ops.push_back(new Elemwise("add"));
+  ops.push_back(new Elemwise("sub"));
+  ops.push_back(new Clip());
+  ops.push_back(new Flatten());
+  ops.push_back(new Reshape());
+  ops.push_back(new CVMClip());
+  ops.push_back(new CVMShift("right"));
+  //ops.push_back(new CVMShift("left"));
 
   for(int i = 0; i < range; i++){
     XCortex::XCortex xcortex; 

@@ -125,14 +125,14 @@ namespace XCortex{
     }
 
     void init(){
-      init_param();
       init_shape();
+      init_param();
       init_inputs();
       infer_shape();
     }
     void init(DataSet& data_set){
-      init_param();
       init_shape();
+      init_param();
       init_inputs(data_set);
       infer_shape();
     }

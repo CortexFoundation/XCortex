@@ -1,14 +1,14 @@
-#ifndef XCORTEX_BROADCAST_H
-#define XCORTEX_BROADCAST_H
+#ifndef XCORTEX_FLATTEN_H
+#define XCORTEX_FLATTEN_H
 
 #include "OP.h"
 
 namespace XCortex{
-  class Broadcast: public OP{
+  class Flatten: public OP{
     public:
-      Broadcast(std::string name){
-        this->name = "broadcast_" + name;
-        num_inputs = 2;
+      Flatten(){
+        this->name = "flatten";
+        num_inputs = 1;
         num_outputs = 1;
         dims = 4;
         ishape.resize(num_inputs);
@@ -22,6 +22,7 @@ namespace XCortex{
         attr.name = name;
         attr.op = cvm::Op::Get(name);
         assert(attr.op != nullptr);
+
         std::istringstream is(attr_str);
         utils::JSONReader reader(&is);
         reader.Read(&attr.dict);

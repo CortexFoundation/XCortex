@@ -1,14 +1,14 @@
-#ifndef XCORTEX_BROADCAST_H
-#define XCORTEX_BROADCAST_H
+#ifndef XCORTEX_RESHAPE_H
+#define XCORTEX_RESHAPE_H
 
 #include "OP.h"
 
 namespace XCortex{
-  class Broadcast: public OP{
+  class Reshape: public OP{
     public:
-      Broadcast(std::string name){
-        this->name = "broadcast_" + name;
-        num_inputs = 2;
+      Reshape(){
+        this->name = "reshape";
+        num_inputs = 1;
         num_outputs = 1;
         dims = 4;
         ishape.resize(num_inputs);
@@ -22,6 +22,11 @@ namespace XCortex{
         attr.name = name;
         attr.op = cvm::Op::Get(name);
         assert(attr.op != nullptr);
+        uint32_t size = ishape[0].Size();
+        char str[1024];
+        sprintf(str,"{\"shape\":\"[1, 1, %d, 1]\"}", size);
+        attr_str = str;
+
         std::istringstream is(attr_str);
         utils::JSONReader reader(&is);
         reader.Read(&attr.dict);
