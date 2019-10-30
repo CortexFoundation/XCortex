@@ -20,6 +20,9 @@
 #include "../src/expand_dims.hpp"
 #include "../src/squeeze.hpp"
 #include "../src/transpose.hpp"
+#include "../src/strided_slice.hpp"
+#include "../src/slice_like.hpp"
+#include "../src/take.hpp"
 
 #include "../src/siphash.h" 
 #include "../src/blake2.h"
@@ -88,6 +91,9 @@ int main(int argc, char **argv){
   ops.push_back(new ExpandDims());
   ops.push_back(new Squeeze());
   ops.push_back(new Transpose());
+  ops.push_back(new StridedSlice());
+  ops.push_back(new SliceLike());
+  ops.push_back(new Take());
 
   for(int i = 0; i < range; i++){
     XCortex::XCortex xcortex; 
