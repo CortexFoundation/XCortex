@@ -4,6 +4,7 @@ obj/
 *.suo
 *.so
 xcortex
+test_xcortex
 .vs
 x64/
 Release/
