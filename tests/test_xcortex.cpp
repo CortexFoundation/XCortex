@@ -11,6 +11,15 @@
 #include "../src/reshape.hpp"
 #include "../src/cvm_clip.hpp"
 #include "../src/cvm_shift.hpp"
+#include "../src/cvm_precision.hpp"
+#include "../src/abs.hpp"
+#include "../src/concatenate.hpp"
+#include "../src/repeat.hpp"
+#include "../src/negative.hpp"
+#include "../src/tile.hpp"
+#include "../src/expand_dims.hpp"
+#include "../src/squeeze.hpp"
+#include "../src/transpose.hpp"
 
 #include "../src/siphash.h" 
 #include "../src/blake2.h"
@@ -70,6 +79,15 @@ int main(int argc, char **argv){
   ops.push_back(new CVMClip());
   ops.push_back(new CVMShift("right"));
   //ops.push_back(new CVMShift("left"));
+  ops.push_back(new Abs());
+  ops.push_back(new CVMPrecision());
+  ops.push_back(new Concatenate());
+  ops.push_back(new Repeat());
+  ops.push_back(new Negative());
+  ops.push_back(new Tile());
+  ops.push_back(new ExpandDims());
+  ops.push_back(new Squeeze());
+  ops.push_back(new Transpose());
 
   for(int i = 0; i < range; i++){
     XCortex::XCortex xcortex; 
