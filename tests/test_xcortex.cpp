@@ -2,6 +2,7 @@
 #include "../src/dense.hpp"
 #include "../src/relu.hpp"
 #include "../src/conv2d.hpp"
+#include "../src/maxpool2d.hpp"
 #include "../src/broadcast.hpp"
 #include "../src/reduce.hpp"
 
@@ -48,6 +49,7 @@ int main(int argc, char **argv){
   ops.push_back(new Dense());
   ops.push_back(new Relu());
   ops.push_back(new Conv2d());
+  ops.push_back(new MaxPool2d());
   ops.push_back(new Broadcast("add"));
   ops.push_back(new Broadcast("sub"));
   ops.push_back(new Broadcast("mul"));
