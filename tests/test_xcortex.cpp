@@ -23,6 +23,10 @@
 #include "../src/strided_slice.hpp"
 #include "../src/slice_like.hpp"
 #include "../src/take.hpp"
+#include "../src/cvm_lut.hpp"
+#include "../src/upsampling.hpp"
+#include "../src/get_valid_count.hpp"
+#include "../src/non_max_suppression.hpp"
 
 #include "../src/siphash.h" 
 #include "../src/blake2.h"
@@ -94,6 +98,10 @@ int main(int argc, char **argv){
   ops.push_back(new StridedSlice());
   ops.push_back(new SliceLike());
   ops.push_back(new Take());
+  ops.push_back(new CVMLut());
+  ops.push_back(new UpSampling());
+  ops.push_back(new GetValidCounts());
+  //ops.push_back(new NonMaximumSuppression());
 
   for(int i = 0; i < range; i++){
     XCortex::XCortex xcortex; 
