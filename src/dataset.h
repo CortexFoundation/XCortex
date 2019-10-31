@@ -4,7 +4,6 @@
 #include "common.h"
 
 namespace XCortex{
-  struct Random;
   struct DataSet{
     uint32_t size;
     std::vector<int32_t> data;

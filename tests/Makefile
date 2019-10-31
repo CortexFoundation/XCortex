@@ -1,13 +1,20 @@
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:../cvm-runtime/build/cpu
+export LIBRARY_PATH=$LIBRARY_PATH:../cvm-runtime/build/cpu
 
 cvm:
 	make -C ../cvm-runtime -j8
-	cp ../cvm-runtime/build/cpu/libcvm_runtime_cpu.so ./
-test_dense: cvm
-	g++ -o test_dense ../src/dense.hpp test_dense.cpp -I../cvm-runtime/include -L../cvm-runtime/build/cpu/ -lcvm_runtime_cpu --std=c++11 -pthread -fopenmp -I./ -g -DDEBUG && ./test_dense	
+#	cp ../cvm-runtime/build/cpu/libcvm_runtime_cpu.so ./
+
+blake2b.o:
+	g++ -c -o blake2b.o ../src/blake2b/blake2b-ref.cpp -I../src/ 
+siphash.o:
+	g++ -c -o siphash.o ../src/siphash/siphash.cc 
+test_dense: blake2b.o siphash.o cvm
+	g++ -o test_dense blake2b.o siphash.o test_dense.cpp -I../cvm-runtime/include  -lcvm_runtime_cpu --std=c++11 -pthread -fopenmp -I../src/ -I../src/ops/ -g -DDEBUG && ./test_dense	
 test_relu: cvm
-	g++ -o test_relu ../src/relu.hpp test_relu.cpp -I../cvm-runtime/include -L../cvm-runtime/build/cpu/ -lcvm_runtime_cpu --std=c++11 -pthread -fopenmp -I./ -g -DDEBUG && ./test_relu	
-test_xcortex: cvm
-	g++ -o test_xcortex test_xcortex.cpp ../src/blake2b-ref.cpp ../src/siphash.cc -I../cvm-runtime/include -L../cvm-runtime/build/cpu/ -lcvm_runtime_cpu --std=c++11 -pthread -fopenmp -I./ -g && ./test_xcortex
+	g++ -o test_relu  blake2b.o siphash.o test_relu.cpp -I../cvm-runtime/include  -lcvm_runtime_cpu --std=c++11 -pthread -fopenmp -I./ -g -DDEBUG && ./test_relu	
+test_xcortex: blake2b.o siphash.o cvm
+	g++ -o test_xcortex test_xcortex.cpp blake2b.o siphash.o  -I../cvm-runtime/include -lcvm_runtime_cpu --std=c++11 -pthread -fopenmp -I./ -g && ./test_xcortex
       
 
 clean:

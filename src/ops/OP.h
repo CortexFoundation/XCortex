@@ -1,7 +1,7 @@
 #ifndef XCORTEX_OP_H
 #define XCORTEX_OP_H
 
-#include "common.h"
+#include "../common.h"
 
 namespace XCortex{
 

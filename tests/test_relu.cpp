@@ -1,4 +1,5 @@
-#include "../src/relu.hpp"
+#include "../src/dataset.h"
+#include "../src/ops/relu.hpp"
 
 #include <iostream>
 using namespace std;
