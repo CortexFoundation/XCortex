@@ -5,7 +5,7 @@
 #include <cstdlib>
 #include <stdint.h>
 #include <time.h>
-#include "siphash.h"
+#include "siphash/siphash.h"
 
 
 namespace XCortex{
