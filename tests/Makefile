@@ -15,8 +15,10 @@ test_xcortex: blake2b.o siphash.o cvm
 	g++ -o test_xcortex test_xcortex.cpp blake2b.o siphash.o -I../cvm-runtime/include -lcvm_runtime_cpu --std=c++11 -pthread -fopenmp -I./ -g && ./test_xcortex
 
 miner: blake2b.o siphash.o
-	g++ ../src/miner/miner.cpp siphash.o blake2b.o -o miner -I../include/rapidjson -std=c++11 -I../cvm-runtime/include -lpthread -lcvm_runtime_cpu && ./miner
+	g++ ../src/miner/miner.cpp siphash.o blake2b.o -o miner -I../include/rapidjson -std=c++11 -I../cvm-runtime/include -lpthread -lcvm_runtime_cpu -g && ./miner
       
+verify: blake2b.o siphash.o
+	g++ ../src/verify.cpp siphash.o blake2b.o -o verify -I../include/rapidjson -std=c++11 -I../cvm-runtime/include -lpthread -lcvm_runtime_cpu && ./verify
 
 clean:
 	rm test_dense test_relu test_xcortex miner

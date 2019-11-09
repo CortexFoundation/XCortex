@@ -37,8 +37,15 @@ namespace XCortex{
   class XCortex{
     siphash_keys sipkeys;
     Random xcortex_random;
+    std::vector<OP*> ops;
     public:
       XCortex(){
+        vector<void*> objList = Reflector::Instance()->ObjectList(); 
+        ops.resize(objList.size());
+        for(int i = 0; i < objList.size(); i++){
+          ops[i] = (OP*)objList[i];
+          ops[i]->init();
+        }
       }
       void setheader(const char *header, const u32 headerlen, siphash_keys *keys) {
         char hdrkey[32];
@@ -77,12 +84,6 @@ namespace XCortex{
       }
 
       void run(char* result, size_t result_size){
-        vector<void*> objList = Reflector::Instance()->ObjectList(); 
-        vector<OP*> ops(objList.size());
-        for(int i = 0; i < objList.size(); i++){
-          ops[i] = (OP*)objList[i];
-        }
-
         xcortex_random.reset();
         DataSet data_set(&xcortex_random);
 
@@ -95,8 +96,9 @@ namespace XCortex{
           const int op_id = op_ids[i];
           OP* op = ops[op_id];
           std::cout << "*****op " << i << ": " << op->name << std::endl;
-          op->init(data_set);
+          op->random_data(data_set);
           op->run(data_set);
+//          op->Release();
         }
         
         blake2b_hash(data_set.data.data(), data_set.size, result, result_size);
