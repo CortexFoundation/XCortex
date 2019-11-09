@@ -1,6 +1,14 @@
 #ifndef XCORTEX_COMMON_H
 #define XCORTEX_COMMON_H
 
+#define OP_SHAPE 8
+
+#define NUM_OPS 32
+
+#define XCORTEX_BITS 10
+#define DATA_SET_SIZE (1 << XCORTEX_BITS) 
+#define DATA_SET_MASK (DATA_SET_SIZE - 1)
+
 #include <cvm/c_api.h>
 #include <cvm/model.h>
 #include <numeric>
@@ -23,20 +31,13 @@
 
 #include "random.h"
 #include "dataset.h"
+#include "reflactor.hpp"
 
 namespace XCortex{
-static Random xcortex_random;
 using namespace cvm;
 using namespace cvm::runtime;
 using namespace std;
 
-#define OP_SHAPE 8
-
-#define NUM_OPS 32
-
-#define XCORTEX_BITS 10
-#define DATA_SET_SIZE (1 << XCORTEX_BITS) 
-#define DATA_SET_MASK (DATA_SET_SIZE - 1)
 };
 
 

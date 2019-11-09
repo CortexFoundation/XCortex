@@ -34,7 +34,7 @@ namespace XCortex{
 
     virtual void init_shape() = 0;
 
-    void init_inputs(){
+    void init_inputs(Random& xcortex_random){
         std::cout << "init inputs" << std::endl;
         init_shape();
 
@@ -72,9 +72,7 @@ namespace XCortex{
             DLTensor* cpu_tensor;
             CVMArrayAlloc((int64_t*)ishape[i].data(), ishape[i].ndim(), dtype_code, dtype_bits, dtype_lanes, kDLCPU, 0, &cpu_tensor);
 
-            //std::vector<int32_t> data = xcortex_random.generate_random_value(size);
             std::vector<int32_t> data(size);
-            //std::copy_n(data_set.begin() + data_set_index, size, data.begin());
             data_set.Read(data, size);
 
 #ifdef DEBUG
@@ -124,10 +122,10 @@ namespace XCortex{
         }
     }
 
-    void init(){
+    void init(Random& xcortex_random){
       init_shape();
       init_param();
-      init_inputs();
+      init_inputs(xcortex_random);
       infer_shape();
     }
     void init(DataSet& data_set){

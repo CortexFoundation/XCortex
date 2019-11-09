@@ -6,7 +6,8 @@ using namespace std;
 using namespace XCortex;
 
 int main(){
-    DataSet data_set(DATA_SET_SIZE);
+    Random xcortex_random;
+    DataSet data_set(&xcortex_random);
     Dense dense;
     dense.init(data_set);
     dense.run(data_set);

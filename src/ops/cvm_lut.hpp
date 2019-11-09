@@ -45,6 +45,7 @@ namespace XCortex{
         }
       }
   };
+  REGISTEROP(CVMLut)
 };
 
 

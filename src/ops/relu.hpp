@@ -52,6 +52,7 @@ namespace XCortex{
       }
 
   };
+  REGISTEROP(Relu);
 };
 
 

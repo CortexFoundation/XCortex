@@ -44,6 +44,7 @@ namespace XCortex{
         ishape[1] = valid_count_shp;
       }
   };
+//  REGISTER_OP(NonMaximumSuppression);
 };
 
 

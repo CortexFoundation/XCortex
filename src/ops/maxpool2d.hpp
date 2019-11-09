@@ -45,6 +45,7 @@ namespace XCortex{
         ishape[0] = shp;
       }
   };
+  REGISTEROP(MaxPool2d);
 };
 
 #endif

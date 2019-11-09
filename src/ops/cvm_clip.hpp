@@ -43,6 +43,7 @@ namespace XCortex{
         }
       }
   };
+  REGISTEROP(CVMClip);
 };
 
 
