@@ -62,10 +62,12 @@ class Net{
     }
 
     int Send(std::string buffer){
-      return send(socket_fd, buffer.c_str(), buffer.size(), 0);
+      int ret = send(socket_fd, buffer.c_str(), buffer.size(), 0);
+      return ret;
     }
     int Recv(char* buffer, unsigned int size){
-      return recv(socket_fd, buffer, size, 0);
+      int ret = recv(socket_fd, buffer, size, 0);
+      return ret;
     }
     void Close(){
       close(socket_fd);

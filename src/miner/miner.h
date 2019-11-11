@@ -4,6 +4,8 @@
 #include "net.hpp"
 #include <iostream>
 #include <vector>
+#include <stdint.h>
+#include <mutex>
 
 class Miner{
   std::string pool_uri;
@@ -11,12 +13,15 @@ class Miner{
   std::string account;
   std::string worker;
   Net *net;
+  mutex mut;
 
   std::string taskHeader, taskNonce, taskDifficulty;
+  uint64_t accepted;
+  uint64_t rejected;
 
   void Login();
   void GetWork();
-  void Submit(const std::vector<char>& hash);
+  void Submit(const std::string header, const uint64_t nonce);
   void Parse(const char* strJson);
   public:
     void CalculateHash();

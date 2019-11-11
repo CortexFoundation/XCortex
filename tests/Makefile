@@ -17,8 +17,8 @@ test_xcortex: blake2b.o siphash.o cvm
 miner: blake2b.o siphash.o
 	g++ ../src/miner/miner.cpp siphash.o blake2b.o -o miner -I../include/rapidjson -std=c++11 -I../cvm-runtime/include -lpthread -lcvm_runtime_cpu -g && ./miner
       
-verify: blake2b.o siphash.o
-	g++ ../src/verify.cpp siphash.o blake2b.o -o verify -I../include/rapidjson -std=c++11 -I../cvm-runtime/include -lpthread -lcvm_runtime_cpu && ./verify
+test_verify: blake2b.o siphash.o
+	g++ test_verify.cpp ../src/verify.cpp siphash.o blake2b.o -o test_verify -I../include/rapidjson -std=c++11 -I../cvm-runtime/include -lpthread -lcvm_runtime_cpu && ./test_verify
 
 clean:
-	rm test_dense test_relu test_xcortex miner
+	rm test_dense test_relu test_xcortex miner test_verify

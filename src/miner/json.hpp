@@ -38,6 +38,9 @@ class Json{
       assert(document.HasMember(key));
       return document[key].GetBool();
     }
+    bool IsNull(const char* key){
+      return document.HasMember(key) ? document[key].IsNull() : true;
+    }
     std::vector<std::string> GetListString(const char *key){
       assert(document.HasMember(key));
       const Value& array = document[key];

@@ -74,16 +74,16 @@ namespace XCortex{
         xcortex_random.set_keys(sipkeys);
       }
 
-      void blake2b_hash(const void* data, uint32_t data_size, char* result, size_t result_size){
+      void blake2b_hash(const void* data, uint32_t data_size, uint8_t* result, size_t result_size){
         blake2b((void*)result, result_size, data, data_size, 0, 0);
         uint64_t hash_key[4];
-        for(int i = 0; i < 4; i++){
-          hash_key[i] = htole64(((uint64_t*)result)[i]);
-          cout << hash_key[i] << endl;
-        }
+        //for(int i = 0; i < 4; i++){
+        //  hash_key[i] = htole64(((uint64_t*)result)[i]);
+        //  cout << hash_key[i] << endl;
+        //}
       }
 
-      void run(char* result, size_t result_size){
+      void run(uint8_t* result, size_t result_size){
         xcortex_random.reset();
         DataSet data_set(&xcortex_random);
 
@@ -98,7 +98,6 @@ namespace XCortex{
           std::cout << "*****op " << i << ": " << op->name << std::endl;
           op->random_data(data_set);
           op->run(data_set);
-//          op->Release();
         }
         
         blake2b_hash(data_set.data.data(), data_set.size, result, result_size);

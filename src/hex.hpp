@@ -7,6 +7,7 @@
 #include <sstream>
 #include <iomanip>
 #include <vector>
+#include <stdint.h>
 
 namespace XCortex{
   class Hex{
@@ -35,6 +36,24 @@ namespace XCortex{
         return dest;
       }
 
+      std::string Uint64ToHexString(uint64_t value){
+        //TODO change value to BigEndian
+        char *bytes = (char*)&value;
+        return EncodeString(bytes);
+      }
+      std::string Uint32ArrayToHexString(std::vector<uint32_t>& values){
+        //char *bytes = (char*)values;
+        std::string str;
+        str.resize(values.size()*4);
+        for(int i = 0; i < values.size(); i++){
+          char *p = (char*)&values[i];
+          str[i*4+0] = p[0];
+          str[i*4+1] = p[1];
+          str[i*4+2] = p[2];
+          str[i*4+3] = p[3];
+        }
+        return EncodeString(str);
+      }
   };
 };
 
