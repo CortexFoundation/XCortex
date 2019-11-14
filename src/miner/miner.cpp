@@ -23,11 +23,10 @@ void Miner::GetWork(){
 
 void Miner::Submit(const std::string header, const uint64_t nonce){
 //  cout << "submit: nonce = " << nonce << ", header = " << header << ", difficulty = " << taskDifficulty << endl;
-  Hex hex;
   //vector<uint32_t> sol(42, 0);
   //std::string solStr = "0x" + hex.Uint32ArrayToHexString(sol);
   //cout << "sol str = " << solStr << endl;
-  std::string nonceStr = "0x" + hex.Uint64ToHexString(nonce);
+  std::string nonceStr = "0x" + XCortex::hex.Uint64ToHexString(nonce);
 
   ///string submit = "{\"id\":73,\"jsonrpc\":\"2.0\", \"method\":\"ctxc_submitWork\",\"params\":[\"" + nonceStr + "\",\"" + header +  "\",\"" + solStr + "\"],\"worker\":\"" + worker + "\"}\n";
   string submit = "{\"id\":73,\"jsonrpc\":\"2.0\",\"method\":\"ctxc_submitWork\",\"params\":[\""+ nonceStr + "\",\"" + header + "\",\"0x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000\"],\"worker\":\"\"}\n";
@@ -93,11 +92,10 @@ void Miner::CalculateHash(){
   cout << "start calculate hash.." << endl;
   XCortex::XCortex xcortex; 
   srand((unsigned)time(0));
-  XCortex::Hex hex;
   while(1){
     if(taskHeader != ""){
       //cout << "header: " << taskHeader << endl;
-      vector<unsigned char> header = hex.DecodeString(taskHeader.substr(2, taskHeader.size() - 2));      
+      vector<unsigned char> header = XCortex::hex.DecodeString(taskHeader.substr(2, taskHeader.size() - 2));      
       uint64_t nonce = rand();
       xcortex.set_header_nonce(header, nonce);
       uint8_t hash_result[32];
@@ -109,7 +107,7 @@ void Miner::CalculateHash(){
 //      }
 //      cout << endl;
 //      cout << "difficulty: ";
-      vector<uint8_t> difficulty = hex.DecodeString(taskDifficulty.substr(2, taskDifficulty.size() - 2));
+      vector<uint8_t> difficulty = XCortex::hex.DecodeString(taskDifficulty.substr(2, taskDifficulty.size() - 2));
 //      for(int i = 0; i < 32; i++){
 //        cout << (uint32_t)difficulty[i] << " ";
 //      }
@@ -128,7 +126,8 @@ void Miner::Run(){
 
   std::thread t(&Miner::CalculateHash, this);
 
-  char buffer[1024] = {'\0'};
+  //char buffer[1024] = {'\0'};
+  string buffer;
   while(1){
     char tmpBuf[256];
     int ret = net->Recv(tmpBuf, sizeof(tmpBuf));
@@ -140,12 +139,15 @@ void Miner::Run(){
       mut.unlock();
     }else if(ret > 1 && tmpBuf[ret-1] == '\n'){
       tmpBuf[ret-1] = '\0';
-      strcat(buffer, tmpBuf);
+      //strcat(buffer, tmpBuf);
+      buffer += string(tmpBuf);
       //cout << "recv: " << buffer << endl;
-      Parse(buffer);
-      buffer[0] = '\0';
+      Parse(buffer.c_str());
+      //buffer[0] = '\0';
+      buffer.clear();
     }else{
-      strcat(buffer, tmpBuf); 
+      //strcat(buffer, tmpBuf); 
+      buffer += string(tmpBuf);
     }
     usleep(100);
   }

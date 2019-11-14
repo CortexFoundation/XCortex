@@ -82,6 +82,7 @@ namespace XCortex{
         return ret;
       }
   };
+  static Hex hex;
 };
 
 #endif

@@ -11,14 +11,13 @@ int Verify(const uint64_t nonce, const uint8_t* header, const uint8_t *difficult
   cout << "verify : nonce = " << nonce << ", difficulty=" << difficulty << endl; 
 #endif
   XCortex::XCortex xcortex; 
-  XCortex::Hex hex;
   vector<uint8_t> h(header, header+32);
   xcortex.set_header_nonce(h, nonce);
   uint8_t hash_result[32];
   xcortex.run(hash_result, sizeof(hash_result));
   const uint8_t *p = difficulty[1] == 'x' ? difficulty + 2 : difficulty;
   string strDiff((char*)(p));
-  vector<uint8_t> diff = hex.DecodeString(strDiff);
+  vector<uint8_t> diff = XCortex::hex.DecodeString(strDiff);
 
 #ifdef DEBUG
   cout << "hash result: "; 
@@ -41,7 +40,6 @@ int Verify2(const uint64_t nonce, const uint8_t* header, const uint8_t* difficul
   cout << "verify : nonce = " << nonce << ", shareTarget=" << shareTarget << ",blockTarget=" << blockTarget << endl; 
 #endif
   XCortex::XCortex xcortex; 
-  XCortex::Hex hex;
   vector<uint8_t> h(header, header+32);
   xcortex.set_header_nonce(h, nonce);
   uint8_t hash_result[32];
@@ -53,9 +51,9 @@ int Verify2(const uint64_t nonce, const uint8_t* header, const uint8_t* difficul
   string strDiff0((char*)(p0));
   string strDiff1((char*)(p1));
   string strDiff2((char*)(p2));
-  vector<uint8_t> diff0 = hex.DecodeString(strDiff0);
-  vector<uint8_t> diff1 = hex.DecodeString(strDiff1);
-  vector<uint8_t> diff2 = hex.DecodeString(strDiff2);
+  vector<uint8_t> diff0 = XCortex::hex.DecodeString(strDiff0);
+  vector<uint8_t> diff1 = XCortex::hex.DecodeString(strDiff1);
+  vector<uint8_t> diff2 = XCortex::hex.DecodeString(strDiff2);
 
 #ifdef DEBUG
   cout << "hash result: "; 
