@@ -13,7 +13,7 @@ libverify.so: blake2b.o siphash.o xcortex.o verify.o
 
 miner: blake2b.o siphash.o
 	make -C ./cvm-runtime/ cpu
-	g++ -g src/miner/miner.cpp siphash.o blake2b.o -o miner -Iinclude/rapidjson -std=c++11 -Icvm-runtime/include -lpthread -Lcvm-runtime/build/cpu/ -lcvm_runtime_cpu
+	g++ src/miner/miner.cpp siphash.o blake2b.o -o miner -Iinclude/rapidjson -std=c++11 -Icvm-runtime/include -lpthread -Lcvm-runtime/build/cpu/ -lcvm_runtime_cpu -fopenmp
 
 clean:
 	rm -f blake2b.o siphash.o xcortex.o verify.o libverify.so miner

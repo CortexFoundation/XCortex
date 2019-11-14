@@ -16,6 +16,7 @@ class Miner{
   mutex mut;
 
   std::string taskHeader, taskNonce, taskDifficulty;
+  uint64_t hashs;
   uint64_t accepted;
   uint64_t rejected;
 
@@ -25,6 +26,7 @@ class Miner{
   void Parse(const char* strJson);
   public:
     void CalculateHash();
+    void PrintHashRate();
     Miner(const std::string uri, const unsigned int port, const std::string account, const std::string worker);
     void Run();
     void Stop();

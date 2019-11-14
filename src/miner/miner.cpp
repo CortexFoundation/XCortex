@@ -6,6 +6,7 @@
 #include <iostream>
 #include <thread>
 #include <mutex>
+#include <omp.h>
 
 using namespace std;
 using namespace XCortex;
@@ -54,8 +55,8 @@ void Miner::Parse(const char* strJson){
           isAccepted = json.GetBool("result");
           accepted = isAccepted ? accepted + 1 : accepted;
           rejected = isAccepted ? rejected : rejected + 1;
-          cout << (isAccepted ? "share accepted" : "share reject") << endl;
-          cout << "shared accepted=" << accepted << ", rejected=" << rejected << endl;
+        //  cout << (isAccepted ? "share accepted" : "share reject") << endl;
+        //  cout << "shared accepted=" << accepted << ", rejected=" << rejected << endl;
         }
         break;
       case 0:
@@ -65,7 +66,7 @@ void Miner::Parse(const char* strJson){
           taskHeader = result[0];
           taskNonce = result[1];
           taskDifficulty = result[2];
-          cout << "taskHeader = " << taskHeader << ", taskNonce = " << taskNonce << ", taskDifficulty = " << taskDifficulty << endl;
+          cout << "recv task: taskHeader = " << taskHeader << ", taskNonce = " << taskNonce << ", taskDifficulty = " << taskDifficulty << endl;
         }
         break;
       default:
@@ -86,6 +87,7 @@ Miner::Miner(const std::string uri, const unsigned int port, const std::string a
   taskDifficulty = "";
   accepted = 0;
   rejected = 0;
+  hashs = 0;
 }
 
 void Miner::CalculateHash(){
@@ -100,6 +102,7 @@ void Miner::CalculateHash(){
       xcortex.set_header_nonce(header, nonce);
       uint8_t hash_result[32];
       xcortex.run(hash_result, sizeof(hash_result));
+      ++hashs;
 
 //      cout << "hash result: "; 
 //      for(int i = 0; i < 32; i++){
@@ -116,15 +119,23 @@ void Miner::CalculateHash(){
         Submit(taskHeader, nonce);
       }
     }
-    usleep(100);
   }       
+}
+void Miner::PrintHashRate(){
+  double start = omp_get_wtime();
+  while(1){
+    sleep(1);
+    double time = omp_get_wtime() - start;
+    cout << "hash rate = " << hashs / time << ", share accepted=" << accepted << ", share rejected=" << rejected << endl; 
+  }
 }
 
 void Miner::Run(){
   assert(net->Init());
   Login();
 
-  std::thread t(&Miner::CalculateHash, this);
+  std::thread thread_calculate_hash(&Miner::CalculateHash, this);
+  std::thread thread_print_hash_rate(&Miner::PrintHashRate, this);
 
   //char buffer[1024] = {'\0'};
   string buffer;
@@ -151,7 +162,8 @@ void Miner::Run(){
     }
     usleep(100);
   }
-  t.join();
+  thread_calculate_hash.join();
+  thread_print_hash_rate.join();
 }
 
 void Miner::Stop(){
