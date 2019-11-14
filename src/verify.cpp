@@ -6,11 +6,12 @@
 using namespace std;
 using namespace XCortex;
 
+
 int Verify(const uint64_t nonce, const uint8_t* header, const uint8_t *difficulty){
 #ifdef DEBUG
   cout << "verify : nonce = " << nonce << ", difficulty=" << difficulty << endl; 
 #endif
-  XCortex::XCortex xcortex; 
+  static XCortex::XCortex xcortex; 
   vector<uint8_t> h(header, header+32);
   xcortex.set_header_nonce(h, nonce);
   uint8_t hash_result[32];
@@ -39,7 +40,7 @@ int Verify2(const uint64_t nonce, const uint8_t* header, const uint8_t* difficul
 #ifdef DEBUG
   cout << "verify : nonce = " << nonce << ", shareTarget=" << shareTarget << ",blockTarget=" << blockTarget << endl; 
 #endif
-  XCortex::XCortex xcortex; 
+  static XCortex::XCortex xcortex; 
   vector<uint8_t> h(header, header+32);
   xcortex.set_header_nonce(h, nonce);
   uint8_t hash_result[32];
