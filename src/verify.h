@@ -2,12 +2,14 @@
 #define XCORTEX_VERIFY_H
 
 #include <stdint.h>
-#include <vector>
 #ifdef __cplusplus
 extern "C"
 {
 #endif
-bool verify(uint32_t nonce, std::vector<uint8_t> header, const int8_t *hash);
+
+int Verify(const uint64_t nonce, const uint8_t* header, const uint8_t*difficulty);
+int Verify2(const uint64_t nonce, const uint8_t* header, const uint8_t *difficulty, const uint8_t *shareTarget, const uint8_t *blockTarget, int32_t*ret);
+
 #ifdef __cplusplus
 }
 #endif

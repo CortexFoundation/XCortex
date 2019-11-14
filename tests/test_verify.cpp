@@ -1,6 +1,7 @@
 #include "../src/verify.h"
 #include <iostream>
 #include <stdint.h>
+#include <vector>
 #include <unistd.h>
 using namespace std;
 
@@ -19,6 +20,6 @@ int main(int argc, char **argv){
   }
 
   int8_t hash[] = {1,2,23,3,4,4};
-  bool ret = verify(nonce, header, hash);
+  int ret = Verify(nonce, (uint8_t*)header.data(), (uint8_t*)hash);
   return 0;
 }

@@ -46,16 +46,20 @@ class Net{
       if(ip.empty()){
         struct hostent *hptr = gethostbyname(domain.c_str());
         if(hptr == NULL){
+          std::cout << "gethostbyname error: " << GetErrorString() << std::endl;
           return false;
         }
         servaddr.sin_addr.s_addr = *((unsigned long long *)hptr->h_addr_list[0]);
       }else{
+        std::cout << ip << std::endl;
         if(inet_pton(AF_INET, ip.c_str(), &servaddr.sin_addr) <= 0){
+          std::cout << "inet_pton error: " << GetErrorString() << std::endl;
           return false;
         }
       }
 
       if(connect(socket_fd, (struct sockaddr*)&servaddr, sizeof(servaddr)) < 0){
+        std::cout << "connect error: " << GetErrorString() << std::endl;
         return false;
       }
       return true;
@@ -63,6 +67,7 @@ class Net{
 
     int Send(std::string buffer){
       int ret = send(socket_fd, buffer.c_str(), buffer.size(), 0);
+//      std::cout << "expect send " << buffer.size() << ", actual send " << ret << std::endl;
       return ret;
     }
     int Recv(char* buffer, unsigned int size){

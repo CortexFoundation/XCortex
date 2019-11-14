@@ -95,7 +95,9 @@ namespace XCortex{
         for(int i = 0; i < num_ops; i++){
           const int op_id = op_ids[i];
           OP* op = ops[op_id];
+#ifdef DEBUG
           std::cout << "*****op " << i << ": " << op->name << std::endl;
+#endif
           op->random_data(data_set);
           op->run(data_set);
         }

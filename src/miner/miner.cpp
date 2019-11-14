@@ -22,17 +22,19 @@ void Miner::GetWork(){
 }
 
 void Miner::Submit(const std::string header, const uint64_t nonce){
+//  cout << "submit: nonce = " << nonce << ", header = " << header << ", difficulty = " << taskDifficulty << endl;
   Hex hex;
-  vector<uint32_t> sol(32, 0);
-  std::string solStr = "0x" + hex.Uint32ArrayToHexString(sol);
+  //vector<uint32_t> sol(42, 0);
+  //std::string solStr = "0x" + hex.Uint32ArrayToHexString(sol);
+  //cout << "sol str = " << solStr << endl;
   std::string nonceStr = "0x" + hex.Uint64ToHexString(nonce);
 
-  char submit[1024];
-  sprintf(submit, "{\"id\":73,\"jsonrpc\":\"2.0\", \"method\":\"ctxc_submitWork\",\"params\":[\"%s\",\"%s\",\"%s\"],\"worker\":\"%s\"}\n", nonceStr.c_str(), header.c_str(), solStr.c_str(), worker.c_str());
+  ///string submit = "{\"id\":73,\"jsonrpc\":\"2.0\", \"method\":\"ctxc_submitWork\",\"params\":[\"" + nonceStr + "\",\"" + header +  "\",\"" + solStr + "\"],\"worker\":\"" + worker + "\"}\n";
+  string submit = "{\"id\":73,\"jsonrpc\":\"2.0\",\"method\":\"ctxc_submitWork\",\"params\":[\""+ nonceStr + "\",\"" + header + "\",\"0x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000\"],\"worker\":\"\"}\n";
   mut.lock();
   net->Send(submit);
   mut.unlock();
-  cout << "submit: " << submit << endl; 
+ // cout << "submit: " << submit << endl; 
 }
 
 void Miner::Parse(const char* strJson){
@@ -78,7 +80,7 @@ Miner::Miner(const std::string uri, const unsigned int port, const std::string a
   this->pool_port = port;
   this->account = account;
   this->worker = worker;
-  net = new Net(uri, "", port);
+  net = new Net("", uri, port);
 
   taskNonce = "";
   taskHeader = "";
@@ -94,24 +96,24 @@ void Miner::CalculateHash(){
   XCortex::Hex hex;
   while(1){
     if(taskHeader != ""){
-      cout << "header: " << taskHeader << endl;
+      //cout << "header: " << taskHeader << endl;
       vector<unsigned char> header = hex.DecodeString(taskHeader.substr(2, taskHeader.size() - 2));      
       uint64_t nonce = rand();
       xcortex.set_header_nonce(header, nonce);
       uint8_t hash_result[32];
       xcortex.run(hash_result, sizeof(hash_result));
 
-      cout << "hash result: "; 
-      for(int i = 0; i < 32; i++){
-        cout << (uint32_t)hash_result[i] << " ";
-      }
-      cout << endl;
-      cout << "difficulty: ";
+//      cout << "hash result: "; 
+//      for(int i = 0; i < 32; i++){
+//        cout << (uint32_t)hash_result[i] << " ";
+//      }
+//      cout << endl;
+//      cout << "difficulty: ";
       vector<uint8_t> difficulty = hex.DecodeString(taskDifficulty.substr(2, taskDifficulty.size() - 2));
-      for(int i = 0; i < 32; i++){
-        cout << (uint32_t)difficulty[i] << " ";
-      }
-      cout << endl;
+//      for(int i = 0; i < 32; i++){
+//        cout << (uint32_t)difficulty[i] << " ";
+//      }
+//      cout << endl;
       if(memcmp(hash_result, difficulty.data(), sizeof(hash_result)) < 0){
         Submit(taskHeader, nonce);
       }
@@ -139,7 +141,7 @@ void Miner::Run(){
     }else if(ret > 1 && tmpBuf[ret-1] == '\n'){
       tmpBuf[ret-1] = '\0';
       strcat(buffer, tmpBuf);
-      cout << "recv: " << buffer << endl;
+      //cout << "recv: " << buffer << endl;
       Parse(buffer);
       buffer[0] = '\0';
     }else{
@@ -155,7 +157,7 @@ void Miner::Stop(){
 }
 
 int main(int argc, char** argv){
-  char *ip = "cuckoo.cortexmint.com";
+  char *ip = "127.0.0.1";
   unsigned int port = 8008;
   string account = "0x23df8a88cab54a0e125bf8c6ed265372c32b2fe1";
   string worker = "";
