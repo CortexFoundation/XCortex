@@ -34,7 +34,7 @@ namespace XCortex{
 
     virtual void init_shape() = 0;
 
-    void init_inputs(){
+    void init_inputs(Random& xcortex_random){
         std::cout << "init inputs" << std::endl;
         init_shape();
 
@@ -47,20 +47,20 @@ namespace XCortex{
             DLTensor* cpu_tensor;
             CVMArrayAlloc((int64_t*)ishape[i].data(), ishape[i].ndim(), dtype_code, dtype_bits, dtype_lanes, kDLCPU, 0, &cpu_tensor);
             std::vector<int32_t> data = xcortex_random.generate_random_value(size);
-#ifdef DEBUG
-            std::cout << "input: " << i << ":" << size << std::endl;
-            for(int j = 0; j < size; j++){
-                std::cout << data[j] << " ";
-            }
-            std::cout << std::endl;
-#endif
+            
+           // std::cout << "input: " << i << ":" << size << std::endl;
+           // for(int j = 0; j < size; j++){
+           //     std::cout << data[j] << " ";
+           // }
+           // std::cout << std::endl;
+
             memcpy(cpu_tensor->data, data.data(), sizeof(int32_t) * size);
             CVMArrayCopyFromTo(cpu_tensor, dl, nullptr);
             CVMArrayFree(cpu_tensor);
             inputs[i] = *dl;
         }
     }
-    void init_inputs(DataSet& data_set){
+    void init_inputs(){
         init_shape();
 
         for(int i = 0; i < num_inputs; i++){
@@ -68,26 +68,30 @@ namespace XCortex{
             //init input data
             DLTensor *dl;
             CVMArrayAlloc((int64_t*)ishape[i].data(), ishape[i].ndim(), dtype_code, dtype_bits, dtype_lanes, ctx, device_id, &dl);
+            inputs[i] = *dl;
+        }
+    }
 
+    void random_data(DataSet& data_set){
+        for(int i = 0; i < num_inputs; i++){
+            uint64_t size = ishape[i].Size();
+            //init input data
             DLTensor* cpu_tensor;
             CVMArrayAlloc((int64_t*)ishape[i].data(), ishape[i].ndim(), dtype_code, dtype_bits, dtype_lanes, kDLCPU, 0, &cpu_tensor);
 
-            //std::vector<int32_t> data = xcortex_random.generate_random_value(size);
             std::vector<int32_t> data(size);
-            //std::copy_n(data_set.begin() + data_set_index, size, data.begin());
             data_set.Read(data, size);
 
 #ifdef DEBUG
-            std::cout << "input: " << i << ":" << size << std::endl;
-            for(int j = 0; j < size; j++){
-                std::cout << data[j] << " ";
-            }
-            std::cout << std::endl;
+       //     std::cout << "input: " << i << ":" << size << std::endl;
+       //     for(int j = 0; j < size; j++){
+       //         std::cout << data[j] << " ";
+       //     }
+       //     std::cout << std::endl;
 #endif
             memcpy(cpu_tensor->data, data.data(), sizeof(int32_t) * size);
-            CVMArrayCopyFromTo(cpu_tensor, dl, nullptr);
+            CVMArrayCopyFromTo(cpu_tensor, &inputs[i], nullptr);
             CVMArrayFree(cpu_tensor);
-            inputs[i] = *dl;
         }
     }
 
@@ -105,13 +109,13 @@ namespace XCortex{
         try{
           bool infer_shape_ret = finfer(attr, &ishape, &oshape);
 #ifdef DEBUG
-          if(infer_shape_ret){
-            std::cout << "FInferShape ishape=[";
-            for (auto& shp : ishape) std::cout << shp << ", ";
-            std::cout << "] oshape=[";
-            for (auto& shp : oshape) std::cout << shp << ", ";
-            std::cout << "]\n";
-          }
+       //   if(infer_shape_ret){
+       //     std::cout << "FInferShape ishape=[";
+       //     for (auto& shp : ishape) std::cout << shp << ", ";
+       //     std::cout << "] oshape=[";
+       //     for (auto& shp : oshape) std::cout << shp << ", ";
+       //     std::cout << "]\n";
+       //   }
 #endif
         }catch(const std::exception& e){
             std::cerr << "FInferShape error with " << e.what() << std::endl;
@@ -124,16 +128,16 @@ namespace XCortex{
         }
     }
 
+    void init(Random& xcortex_random){
+      init_shape();
+      init_param();
+      init_inputs(xcortex_random);
+      infer_shape();
+    }
     void init(){
       init_shape();
       init_param();
       init_inputs();
-      infer_shape();
-    }
-    void init(DataSet& data_set){
-      init_shape();
-      init_param();
-      init_inputs(data_set);
       infer_shape();
     }
 
@@ -178,16 +182,14 @@ namespace XCortex{
         func->CallPacked(targs, &rv);
       };
       op();
-#ifdef DEBUG
-      for(int i = 0; i < num_outputs; i++){
-        std::cout << "output " << i << std::endl;
-        int32_t *data = (int32_t*)outputs[i].data;
-        for(int j = 0; j < oshape[i].Size(); j++){
-            std::cout << data[j] << " ";
-        }
-        std::cout << std::endl;
-      }
-#endif
+//      for(int i = 0; i < num_outputs; i++){
+//        std::cout << "output " << i << std::endl;
+//        int32_t *data = (int32_t*)outputs[i].data;
+//        for(int j = 0; j < oshape[i].Size(); j++){
+//            std::cout << data[j] << " ";
+//        }
+//        std::cout << std::endl;
+//      }
     }
     void run(DataSet& data_set){
       run(); 
@@ -199,7 +201,19 @@ namespace XCortex{
       }
     }
 
-    virtual ~OP(){};
+    void release(){
+      cout << "release op......." << endl;
+      for(size_t i = 0; i < inputs.size(); i++){
+        CVMArrayFree(&inputs[i]);
+      }
+      for(size_t i = 0; i < outputs.size(); i++){
+        CVMArrayFree(&outputs[i]);
+      }
+    }
+
+    virtual ~OP(){
+      release();
+    };
   };
 
 };

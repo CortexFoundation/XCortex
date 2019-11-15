@@ -41,6 +41,8 @@ namespace XCortex{
         }
       }
   };
+  REGISTEROP_BY_NAME(Reduce, max);
+  REGISTEROP_BY_NAME(Reduce, sum);
 };
 
 

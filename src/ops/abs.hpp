@@ -42,7 +42,7 @@ namespace XCortex{
         }
       }
   };
+  REGISTEROP(Abs);
 };
-
 
 #endif

@@ -48,6 +48,8 @@ namespace XCortex{
         ishape[2] = bias_shape;
       }
   };
+
+  REGISTEROP(Dense);
 };
 
 

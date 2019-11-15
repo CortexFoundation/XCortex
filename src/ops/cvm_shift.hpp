@@ -43,7 +43,8 @@ namespace XCortex{
         }
       }
   };
+//  REGISTER_OP_BY_NAME(CVMShift, "left");
+  REGISTEROP_BY_NAME(CVMShift, right);
 };
-
 
 #endif

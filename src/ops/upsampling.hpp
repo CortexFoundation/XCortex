@@ -42,6 +42,7 @@ namespace XCortex{
         }
       }
   };
+  REGISTEROP(UpSampling);
 };
 
 

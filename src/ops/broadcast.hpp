@@ -41,6 +41,10 @@ namespace XCortex{
         }
       }
   };
+  REGISTEROP_BY_NAME(Broadcast, add);
+  REGISTEROP_BY_NAME(Broadcast, sub);
+  //REGISTEROP_BY_NAME(Broadcast, mul);
+  //REGISTEROP_BY_NAME(Broadcast, max);
 };
 
 
