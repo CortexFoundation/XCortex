@@ -36,7 +36,7 @@ int Verify(const uint64_t nonce, const uint8_t* header, const uint8_t *difficult
   return ret;
 } 
 
-int Verify2(const uint64_t nonce, const uint8_t* header, const uint8_t* difficulty, const uint8_t *shareTarget, const uint8_t *blockTarget, int32_t*ret){
+int Verify_remote(const uint64_t nonce, const uint8_t* header, const uint8_t* difficulty, const uint8_t *shareTarget, const uint8_t *blockTarget, int32_t*ret){
 #ifdef DEBUG
   cout << "verify : nonce = " << nonce << ", shareTarget=" << shareTarget << ",blockTarget=" << blockTarget << endl; 
 #endif
