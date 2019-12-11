@@ -45,6 +45,11 @@ namespace XCortex{
           ops[i]->init();
         }
       }
+      ~XCortex(){
+        for(int i = 0; i < ops.size(); i++){
+          delete ops[i];
+        }
+      }
       void setheader(const char *header, const u32 headerlen, siphash_keys *keys) {
         char hdrkey[32];
         // SHA256((unsigned char *)header, headerlen, (unsigned char *)hdrkey);

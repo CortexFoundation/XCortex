@@ -23,8 +23,8 @@ namespace XCortex{
     uint32_t num_inputs;
     uint32_t num_outputs;
     uint32_t dims;
-    std::vector<DLTensor> inputs;
-    std::vector<DLTensor> outputs;
+    std::vector<DLTensor*> inputs;
+    std::vector<DLTensor*> outputs;
     std::vector<TShape> ishape;
     std::vector<TShape> oshape;
     std::string attr_str;
@@ -35,7 +35,6 @@ namespace XCortex{
     virtual void init_shape() = 0;
 
     void init_inputs(Random& xcortex_random){
-        std::cout << "init inputs" << std::endl;
         init_shape();
 
         for(int i = 0; i < num_inputs; i++){
@@ -57,7 +56,7 @@ namespace XCortex{
             memcpy(cpu_tensor->data, data.data(), sizeof(int32_t) * size);
             CVMArrayCopyFromTo(cpu_tensor, dl, nullptr);
             CVMArrayFree(cpu_tensor);
-            inputs[i] = *dl;
+            inputs[i] = dl;
         }
     }
     void init_inputs(){
@@ -68,7 +67,7 @@ namespace XCortex{
             //init input data
             DLTensor *dl;
             CVMArrayAlloc((int64_t*)ishape[i].data(), ishape[i].ndim(), dtype_code, dtype_bits, dtype_lanes, ctx, device_id, &dl);
-            inputs[i] = *dl;
+            inputs[i] = dl;
         }
     }
 
@@ -90,7 +89,7 @@ namespace XCortex{
        //     std::cout << std::endl;
 #endif
             memcpy(cpu_tensor->data, data.data(), sizeof(int32_t) * size);
-            CVMArrayCopyFromTo(cpu_tensor, &inputs[i], nullptr);
+            CVMArrayCopyFromTo(cpu_tensor, inputs[i], nullptr);
             CVMArrayFree(cpu_tensor);
         }
     }
@@ -124,7 +123,7 @@ namespace XCortex{
         for(int i = 0; i < num_outputs; i++){
             DLTensor* dl;
             CVMArrayAlloc((int64_t*)oshape[i].data(), oshape[i].ndim(), dtype_code, dtype_bits, dtype_lanes, ctx, device_id, &dl);
-            outputs[i] = *dl;
+            outputs[i] = dl;
         }
     }
 
@@ -144,10 +143,10 @@ namespace XCortex{
     void run(){
       std::vector<DLTensor> args(num_inputs + num_outputs);
       for(int i = 0; i < num_inputs; i++){
-        args[i] = inputs[i];
+        args[i] = *inputs[i];
       }
       for(int i = 0; i < num_outputs; i++){
-        args[num_inputs + i] = outputs[i];
+        args[num_inputs + i] = *outputs[i];
       }
 
       std::shared_ptr<OpArgs> arg_ptr = std::make_shared<OpArgs>();
@@ -196,18 +195,17 @@ namespace XCortex{
 
       for(int i = 0; i < num_outputs; i++){
         const uint32_t out_size = oshape[i].Size();
-        int32_t* out_data = (int32_t*)outputs[i].data;
+        int32_t* out_data = (int32_t*)outputs[i]->data;
         data_set.Write(out_data, out_size);
       }
     }
 
     void release(){
-      cout << "release op......." << endl;
       for(size_t i = 0; i < inputs.size(); i++){
-        CVMArrayFree(&inputs[i]);
+        CVMArrayFree(inputs[i]);
       }
       for(size_t i = 0; i < outputs.size(); i++){
-        CVMArrayFree(&outputs[i]);
+        CVMArrayFree(outputs[i]);
       }
     }
 
