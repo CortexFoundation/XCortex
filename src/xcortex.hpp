@@ -35,8 +35,6 @@ using namespace std;
 
 namespace XCortex{
   class XCortex{
-    siphash_keys sipkeys;
-    Random xcortex_random;
     std::vector<OP*> ops;
     public:
       XCortex(){
@@ -65,13 +63,14 @@ namespace XCortex{
         setkeys(keys, hdrkey);
       }
 
-      void set_header_nonce(std::vector<uint8_t> header, uint64_t nonce){
+      siphash_keys set_header_nonce(std::vector<uint8_t> header, uint64_t nonce){
+        siphash_keys sipkeys;
         uint64_t littleEndianNonce = htole64(nonce);
         char headerBuf[40];
         memcpy(headerBuf, header.data(), 32);
         memcpy(headerBuf + 32, static_cast<uint64_t*>(&littleEndianNonce), sizeof(nonce));
         setheader(headerBuf, 40, &sipkeys);
-        xcortex_random.set_keys(sipkeys);
+        return sipkeys;
       }
 
       void blake2b_hash(const void* data, uint32_t data_size, uint8_t* result, size_t result_size){
@@ -83,8 +82,7 @@ namespace XCortex{
         //}
       }
 
-      void run(uint8_t* result, size_t result_size){
-        xcortex_random.reset();
+      void run(uint8_t* result, size_t result_size, Random& xcortex_random){
         DataSet data_set(&xcortex_random);
 
         int num_ops = NUM_OPS;//xcortex_random.generate_random_value(MIN_OP, MAX_OP);

@@ -11,11 +11,12 @@ int Verify(const uint64_t nonce, const uint8_t* header, const uint8_t *difficult
 #ifdef DEBUG
   cout << "verify : nonce = " << nonce << ", difficulty=" << difficulty << endl; 
 #endif
-  static XCortex::XCortex xcortex; 
+  XCortex::XCortex xcortex; 
+  Random xcortex_random;
   vector<uint8_t> h(header, header+32);
-  xcortex.set_header_nonce(h, nonce);
+  xcortex_random.set_keys(xcortex.set_header_nonce(h, nonce));
   uint8_t hash_result[32];
-  xcortex.run(hash_result, sizeof(hash_result));
+  xcortex.run(hash_result, sizeof(hash_result), xcortex_random);
   const uint8_t *p = difficulty[1] == 'x' ? difficulty + 2 : difficulty;
   string strDiff((char*)(p));
   vector<uint8_t> diff = XCortex::hex.DecodeString(strDiff);
@@ -40,11 +41,12 @@ int Verify_remote(const uint64_t nonce, const uint8_t* header, const uint8_t* di
 #ifdef DEBUG
   cout << "verify : nonce = " << nonce << ", shareTarget=" << shareTarget << ",blockTarget=" << blockTarget << endl; 
 #endif
-  static XCortex::XCortex xcortex; 
+  XCortex::XCortex xcortex; 
+  Random xcortex_random;
   vector<uint8_t> h(header, header+32);
-  xcortex.set_header_nonce(h, nonce);
+  xcortex_random.set_keys(xcortex.set_header_nonce(h, nonce));
   uint8_t hash_result[32];
-  xcortex.run(hash_result, sizeof(hash_result));
+  xcortex.run(hash_result, sizeof(hash_result), xcortex_random);
   
   const uint8_t *p0 = difficulty[1] == 'x' ? difficulty + 2 : difficulty;
   const uint8_t *p1 = shareTarget[1] == 'x' ? shareTarget + 2 : shareTarget;
