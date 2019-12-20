@@ -1,10 +1,12 @@
 CVMDIR=./cvm-runtime
 
+.PHONY: all cvm-runtime-cpu
+
 all: cvm-runtime-cpu libverify.so
 
 cvm-runtime-cpu:
-	+make -C cvm-runtime cpu
-	ln -sf cvm-runtime/build/cpu/libcvm_runtime_cpu.so .
+	@+make -C cvm-runtime cpu
+	@ln -sf cvm-runtime/build/cpu/libcvm_runtime_cpu.so .
 
 blake2b.o:
 	g++ -fPIC -c -o blake2b.o src/blake2b/blake2b-ref.cpp -Isrc/ 
