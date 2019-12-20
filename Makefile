@@ -1,4 +1,4 @@
-CVMDIR=../infernet
+CVMDIR=../cvm-runtime
 
 blake2b.o:
 	g++ -fPIC -c -o blake2b.o src/blake2b/blake2b-ref.cpp -Isrc/ 
