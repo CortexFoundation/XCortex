@@ -5,8 +5,8 @@ CVMDIR=./cvm-runtime
 all: cvm-runtime-cpu libverify.so
 
 cvm-runtime-cpu:
-	@+make -C cvm-runtime cpu
-	@ln -sf cvm-runtime/build/cpu/libcvm_runtime_cpu.so .
+	@+make -C cvm-runtime lib
+	@ln -sf cvm-runtime/build/libcvm_runtime.so .
 
 blake2b.o:
 	g++ -fPIC -c -o blake2b.o src/blake2b/blake2b-ref.cpp -Isrc/ 
@@ -23,7 +23,7 @@ libverify.so: blake2b.o siphash.o xcortex.o verify.o
 miner: cvm-runtime-cpu blake2b.o siphash.o
 	g++ src/miner/miner.cpp siphash.o blake2b.o -o miner \
 		-Iinclude/rapidjson -std=c++11 -I${CVMDIR}/include -lpthread \
-		-L${CVMDIR}/build/cpu/ -lcvm_runtime_cpu -fopenmp
+		-L${CVMDIR}/build/ -lcvm_runtime -fopenmp
 
 clean:
 	rm -f blake2b.o siphash.o xcortex.o verify.o libverify.so miner

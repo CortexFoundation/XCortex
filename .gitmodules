@@ -1,3 +1,3 @@
 [submodule "cvm-runtime"]
 	path = cvm-runtime
-	url = https://github.com:CortexFoundation/cvm-runtime.git
+	url = https://github.com/CortexFoundation/cvm-runtime.git 

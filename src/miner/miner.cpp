@@ -94,6 +94,7 @@ void Miner::CalculateHash(){
   cout << "start calculate hash.." << endl;
   XCortex::XCortex xcortex; 
   srand((unsigned)time(0));
+  Random xcortex_random;
   while(1){
     if(taskHeader != ""){
       //cout << "header: " << taskHeader << endl;
@@ -101,7 +102,7 @@ void Miner::CalculateHash(){
       uint64_t nonce = rand();
       xcortex.set_header_nonce(header, nonce);
       uint8_t hash_result[32];
-      xcortex.run(hash_result, sizeof(hash_result));
+      xcortex.run(hash_result, sizeof(hash_result), xcortex_random);
       ++hashs;
 
 //      cout << "hash result: "; 
