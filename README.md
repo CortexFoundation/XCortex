@@ -17,6 +17,9 @@ git submodule update --init --recursive
 cd tests
 make test_verify 
 
+export LD_LIBRARY_PATH=$PWD
+./test_verify
+
 batch=8, n=8, k=8
 first =0: 218 12
 first =0: -108 114
@@ -42,6 +45,9 @@ user	0m0.954s
 sys	0m0.004s
 
 make test_xcortex 
+
+export LD_LIBRARY_PATH=$PWD
+./test_xcortex
 
 header : 00000000000000000000000000000000000000000000000000000000000000000000000000000000
 batch=8, n=8, k=8
