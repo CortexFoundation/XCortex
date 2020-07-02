@@ -7,6 +7,7 @@ using namespace std;
 
 #define HEADERLEN 80
 int main(int argc, char **argv){
+  //header
   vector<uint8_t> header(HEADERLEN, 0);
   uint64_t nonce = 0;
   uint32_t range = 1;
@@ -19,7 +20,8 @@ int main(int argc, char **argv){
     }
   }
 
-  int8_t hash[] = {1,2,23,3,4,4};
-  int ret = Verify(nonce, (uint8_t*)header.data(), (uint8_t*)hash);
+  int8_t difficulty[64] = "0x800000000000";
+  int ret = Verify(nonce, (uint8_t*)header.data(), (uint8_t*)difficulty);
+  cout << ret << endl;
   return 0;
 }

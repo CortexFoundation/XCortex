@@ -166,8 +166,10 @@ namespace XCortex{
 
       auto op_name = name;
       int device_type = static_cast<int>(ctx);
-      std::string module_name = "cvm.runtime.cvm";
-      if (device_type == kDLGPU) module_name += "_cuda";
+      std::string module_name = "cvm.runtime.";
+      if(device_type = kDLCPU) module_name += "cpu";
+      else if (device_type == kDLGPU) module_name += "gpu";
+      else if (device_type == kDLFORMAL) module_name += "formal";
       module_name += ".";
       auto func = cvm::runtime::Registry::Get(module_name + op_name);
       VERIFY(func != nullptr) << "function undefined " << module_name + op_name;

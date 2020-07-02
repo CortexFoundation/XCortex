@@ -4,7 +4,6 @@
 using namespace std;
 using namespace XCortex;
 
-
 #define HEADERLEN 80
 int main(int argc, char **argv){
   vector<uint8_t> header(HEADERLEN, 0);
@@ -23,12 +22,18 @@ int main(int argc, char **argv){
   }
 
 
+  cout << "header : ";
+  for(int i = 0; i < HEADERLEN; i++){
+    cout << (int)header[i];
+  }
+  cout << endl;
   for(int i = 0; i < range; i++){
     XCortex::XCortex xcortex; 
     Random xcortex_random;
     xcortex_random.set_keys(xcortex.set_header_nonce(header, nonce+i));
     uint8_t hash_result[32];
     xcortex.run(hash_result, sizeof(hash_result), xcortex_random);
+    cout << "nonce " << nonce+i << " hash : ";
     for(int i = 0; i < 32; i++){
       cout << (uint32_t)hash_result[i] << " ";
     }
