@@ -11,3 +11,4 @@ Release/
 Debug/
 build/
 *.o
+tests/test_*
