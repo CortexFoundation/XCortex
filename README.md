@@ -3,11 +3,11 @@
 All would be changed on developing
 # Getting the sources
 ```
-git clone --recursive git@github.com:CortexFoundation/XCortex.git
+git clone --recursive https://github.com:CortexFoundation/XCortex.git
 ```
 Alternatively :
 ```
-git clone git@github.com:CortexFoundation/XCortex.git
+git clone https://github.com:CortexFoundation/XCortex.git
 cd XCortex
 git submodule update --init --recursive
 ```
