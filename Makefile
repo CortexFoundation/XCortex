@@ -5,6 +5,7 @@ CVMDIR=./cvm-runtime
 all: cvm-runtime-cpu libverify.so
 
 cvm-runtime-cpu:
+	cp cvm-runtime/cmake/config.cmake cvm-runtime/
 	@+make -C cvm-runtime lib
 	@ln -sf cvm-runtime/build/libcvm_runtime.so .
 
