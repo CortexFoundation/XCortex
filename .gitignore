@@ -12,3 +12,4 @@ Debug/
 build/
 *.o
 tests/test_*
+.ccls-cache/
